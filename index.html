@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Moja platforma - moje zasady 😈</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #fff0fa; text-align: center; padding: 30px; }
+    #main { display: none; }
+    img { width: 200px; border-radius: 12px; margin: 10px 0; }
+    input, textarea, button { padding: 10px; font-size: 16px; margin: 5px; border-radius: 8px; border: 1px solid #ccc; }
+    button { background: #ffa6f9; border: none; cursor: pointer; }
+    .film-blok { border: 2px dashed #ccc; padding: 15px; margin: 15px auto; width: 90%; background: #fff; border-radius: 12px; }
+  </style>
+</head>
+<body>
+
+  <div id="login">
+    <h2>🔐 Wpisz hasło, aby wejść</h2>
+    <input type="password" id="password" placeholder="Hasło">
+    <br><br>
+    <button onclick="checkPassword()">Wejdź</button>
+    <p id="wrong" style="color:red;"></p>
+  </div>
+
+  <div id="main">
+    <h1>🎬 Tajna platforma Momi 🎬</h1>
+    <p><strong>✨ Moja platforma, moje zasady 😈 ✨</strong></p>
+
+    <div>
+      <h3>Dodaj film:</h3>
+      <input type="text" id="filmTytul" placeholder="Tytuł filmu"><br>
+      <input type="text" id="filmURL" placeholder="Link do filmu z Google Drive"><br>
+      <input type="file" id="miniaturka" accept="image/*"><br>
+      <button onclick="dodajFilm()">Dodaj 🎥</button>
+    </div>
+
+    <div id="filmy"></div>
+  </div>
+
+  <script>
+    function checkPassword() {
+      const pass = document.getElementById("password").value;
+      if (pass === "1234") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("main").style.display = "block";
+      } else {
+        document.getElementById("wrong").textContent = "Nieprawidłowe hasło!";
+      }
+    }
+
+    function dodajFilm() {
+      const tytul = document.getElementById("filmTytul").value;
+      const url = document.getElementById("filmURL").value;
+      const miniaturkaInput = document.getElementById("miniaturka");
+
+      if (!tytul || !url || !miniaturkaInput.files[0]) {
+        alert("Uzupełnij wszystkie pola!");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const miniaturkaSrc = e.target.result;
+
+        const blok = document.createElement("div");
+        blok.className = "film-blok";
+        blok.innerHTML = `
+          <h3>${tytul}</h3>
+          <img src="${miniaturkaSrc}" alt="Miniaturka">
+          <br>
+          <iframe src="${url}" width="480" height="270" allow="autoplay"></iframe>
+        `;
+
+        document.getElementById("filmy").appendChild(blok);
+      }
+
+      reader.readAsDataURL(miniaturkaInput.files[0]);
+    }
+  </script>
+
+</body>
+</html>
